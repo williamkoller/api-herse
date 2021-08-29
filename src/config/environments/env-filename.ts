@@ -1,3 +1,3 @@
 export default {
-  development: '.env.development.local',
+  environment: '.env',
 };

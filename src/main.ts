@@ -7,10 +7,10 @@ import { Logger } from '@nestjs/common';
 async function bootstrap() {
   const logger = new Logger('Main');
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  const config = app.get(ConfigService);
-  const port = config.get('port');
+  const config = app.get<ConfigService>(ConfigService);
+  const port = config.get<string>('port');
   await app.listen(port, () =>
-    logger.log(`Running 🔥 in ${config.get('nodeEnv')} mode `),
+    logger.log(`Running 🔥 in ${config.get<string>('nodeEnv')} mode `),
   );
 }
 bootstrap();

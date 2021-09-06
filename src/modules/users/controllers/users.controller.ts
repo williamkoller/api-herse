@@ -7,8 +7,9 @@ import {
   HttpStatus,
   Param,
   Post,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '@/modules/users/dtos/create-user/create-user.dto';
 import { CreateUserService } from '@/modules/users/services/create-user/create-user.service';
 import { UserIdInputDto } from '@/modules/users/dtos/user-id-input/user-id-input.dto';
@@ -16,6 +17,7 @@ import { LoadUserByIdService } from '@/modules/users/services/load-user-by-id/lo
 import { ValidationParamsPipe } from '@/common/pipes/validation-params.pipe';
 import { UserOutputType } from '@/modules/users/types/user-output.type';
 import { LoadAllUsersService } from '@/modules/users/services/load-all-users/load-all-users.service';
+import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard';
 
 @ApiTags('users')
 @Controller('users')
@@ -30,20 +32,22 @@ export class UsersController {
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'Create a new user.',
+    description: 'create a new user.',
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: 'Email already in use.',
+    description: 'email already in use.',
   })
-  public async index(
+  public async create(
     @Body() createUserDto: CreateUserDto,
   ): Promise<UserEntity> {
-    return await this.createUserService.add(createUserDto);
+    return await this.createUserService.create(createUserDto);
   }
 
-  @Get('show/:id')
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Load user by id.',
@@ -52,7 +56,7 @@ export class UsersController {
     status: HttpStatus.NOT_FOUND,
     description: 'User not found.',
   })
-  public async show(
+  public async loadById(
     @Param(ValidationParamsPipe) userIdInputDto: UserIdInputDto,
   ): Promise<UserOutputType> {
     return await this.loadUserByIdService.loadById(userIdInputDto.id);

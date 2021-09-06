@@ -12,3 +12,19 @@ export const userTransformer = (user: UserEntity): UserOutputType => {
     updatedAt: user.updatedAt,
   };
 };
+
+export const usersTransformer = (users: UserEntity[]): UserOutputType[] => {
+  for (const user of users) {
+    return [
+      {
+        id: user.id,
+        name: user.name,
+        surname: user.surname,
+        email: user.email,
+        lastLogged: user.lastLogged,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
+    ];
+  }
+};

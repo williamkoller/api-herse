@@ -4,12 +4,18 @@ import { CreateUserDto } from '@/modules/users/dtos/create-user/create-user.dto'
 import {
   CreateUserRepository,
   LoadUserByEmailRepository,
+  LoadUserByIdRepository,
+  LoadAllUsersRepository,
 } from '@/data/protocols/user';
 
 @EntityRepository(UserEntity)
 export class UsersRepository
   extends Repository<UserEntity>
-  implements CreateUserRepository, LoadUserByEmailRepository
+  implements
+    CreateUserRepository,
+    LoadUserByEmailRepository,
+    LoadUserByIdRepository,
+    LoadAllUsersRepository
 {
   public async add(createUserDto: CreateUserDto): Promise<UserEntity> {
     const newUser = this.create(createUserDto);
@@ -18,5 +24,13 @@ export class UsersRepository
 
   public async loadByEmail(email: string): Promise<UserEntity> {
     return await this.findOne({ where: { email } });
+  }
+
+  public async loadById(id: number): Promise<UserEntity> {
+    return await this.findOne({ where: { id } });
+  }
+
+  public async loadAll(): Promise<UserEntity[]> {
+    return await this.find();
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersRepository } from '@/modules/users/repositories/users.repository';
-import { userTransformer } from '../../transformer/user/user.transformer';
-import { UserOutputType } from '../../types/user-output.type';
+import { userTransformer } from '@/modules/users/transformer/user/user.transformer';
+import { UserOutputType } from '@/modules/users/types/user-output.type';
 
 @Injectable()
 export class LoadUserByIdService {

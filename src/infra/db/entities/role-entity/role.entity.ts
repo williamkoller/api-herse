@@ -1,6 +1,6 @@
 import { Column, Entity, JoinTable, ManyToOne } from 'typeorm';
 import { BaseEntity } from '@/infra/db/entities/base-entity/base-entity';
-import { UserEntity } from '../user-entity/user-entity';
+import { UserEntity } from '@/infra/db/entities/user-entity/user-entity';
 
 @Entity('roles')
 export class RoleEntity extends BaseEntity {

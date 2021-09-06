@@ -2,7 +2,7 @@ import { UserEntity } from '@/infra/db/entities/user-entity/user-entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateUserDto } from '@/modules/users/dtos/create-user/create-user.dto';
 import {
-  CreateUserRepository,
+  AddUserRepository,
   LoadUserByEmailRepository,
   LoadUserByIdRepository,
   LoadAllUsersRepository,
@@ -12,7 +12,7 @@ import {
 export class UsersRepository
   extends Repository<UserEntity>
   implements
-    CreateUserRepository,
+    AddUserRepository,
     LoadUserByEmailRepository,
     LoadUserByIdRepository,
     LoadAllUsersRepository

@@ -13,7 +13,7 @@ export class RoleEntity extends BaseEntity {
   permissions: string[];
 
   @Column({ type: 'int4', nullable: false })
-  userId: string;
+  userId: number;
 
   @ManyToOne(() => UserEntity, (user) => user.roles, {
     nullable: true,

@@ -5,14 +5,16 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RolesController } from './controllers/roles.controller';
 import { RolesRepository } from './repositories/roles.repository';
+import { AddRoleService } from './services/add-role/add-role.service';
 import { LoadAllRolesService } from './services/load-all-roles/load-all-roles.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([RoleEntity, RolesRepository])],
   providers: [
-    LoadAllRolesService,
-    CalculateOffsetService,
+    AddRoleService,
     BuildPaginationObjectService,
+    CalculateOffsetService,
+    LoadAllRolesService,
   ],
   controllers: [RolesController],
 })

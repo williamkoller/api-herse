@@ -5,6 +5,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserInputDto } from '@/modules/auth/dtos/user-input/user-input.dto';
 import { UserOutputDto } from '@/modules/auth/dtos/user-output/user-output.dto';
 import { UsersRepository } from '@/modules/users/repositories/users.repository';
+import { userTransformer } from '@/modules/users/transformer/user/user.transformer';
 
 @Injectable()
 export class AuthService implements ValidateUserRepository {
@@ -34,10 +35,12 @@ export class AuthService implements ValidateUserRepository {
 
     const verifyToken = await this.jwtAdapter.decrypt(token);
 
+    await this.lastTimeLogged(user.id);
+
     this.verifyIfUserHasToken(user.id, verifyToken.id);
 
     return {
-      user,
+      user: userTransformer(user),
       token,
     };
   }
@@ -48,5 +51,9 @@ export class AuthService implements ValidateUserRepository {
     if (userHasToken()) {
       throw new UnauthorizedException('Invalid token.');
     }
+  }
+
+  private async lastTimeLogged(userId: number): Promise<void> {
+    await this.userRepo.lastTimeLogged(userId, new Date());
   }
 }

@@ -1,9 +1,9 @@
-import { UserEntity } from '@/infra/db/entities/user-entity/user-entity';
+import { UserOutputType } from '@/modules/users/types/user-output.type';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UserOutputDto {
   @ApiProperty()
-  user: UserEntity;
+  user: UserOutputType;
 
   @ApiProperty()
   token: string;

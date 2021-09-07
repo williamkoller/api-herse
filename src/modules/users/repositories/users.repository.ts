@@ -6,6 +6,7 @@ import {
   LoadUserByEmailRepository,
   LoadUserByIdRepository,
   LoadAllUsersRepository,
+  LastTimeLoggedRepository,
 } from '@/data/protocols/user';
 
 @EntityRepository(UserEntity)
@@ -15,7 +16,8 @@ export class UsersRepository
     AddUserRepository,
     LoadUserByEmailRepository,
     LoadUserByIdRepository,
-    LoadAllUsersRepository
+    LoadAllUsersRepository,
+    LastTimeLoggedRepository
 {
   public async add(createUserDto: CreateUserDto): Promise<UserEntity> {
     const newUser = this.create(createUserDto);
@@ -32,5 +34,12 @@ export class UsersRepository
 
   public async loadAll(): Promise<UserEntity[]> {
     return await this.find();
+  }
+
+  public async lastTimeLogged(userId: number, lastLogged: Date): Promise<void> {
+    await this.query('UPDATE "users" SET "lastLogged" = $2 WHERE id = $1', [
+      userId,
+      lastLogged,
+    ]);
   }
 }

@@ -5,6 +5,8 @@ import { environments } from '@/config/environments/environments';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configService } from '@/infra/db/config/config.service';
 import { UsersModule } from '@/modules/users/users.module';
+import { AuthModule } from '@/modules/auth/auth.module';
+import { RolesModule } from '@/modules/roles/roles.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { UsersModule } from '@/modules/users/users.module';
     }),
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
     forwardRef(() => UsersModule),
+    forwardRef(() => AuthModule),
+    forwardRef(() => RolesModule),
   ],
   controllers: [],
   providers: [],

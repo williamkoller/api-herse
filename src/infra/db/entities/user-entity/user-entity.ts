@@ -1,5 +1,6 @@
-import { BeforeInsert, Column, Entity } from 'typeorm';
+import { BeforeInsert, Column, Entity, JoinTable, OneToMany } from 'typeorm';
 import { BaseEntity } from '@/infra/db/entities/base-entity/base-entity';
+import { RoleEntity } from '@/infra/db/entities/role-entity/role.entity';
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
@@ -17,6 +18,10 @@ export class UserEntity extends BaseEntity {
 
   @Column({ type: 'timestamp', nullable: true })
   lastLogged?: Date;
+
+  @OneToMany(() => RoleEntity, (role) => role.user, { eager: true })
+  @JoinTable()
+  roles: RoleEntity[];
 
   @BeforeInsert()
   emailToLowerCase(): void {

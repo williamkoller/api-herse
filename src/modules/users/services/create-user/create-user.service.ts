@@ -13,7 +13,7 @@ export class CreateUserService {
     private readonly loadUserByEmailService: LoadUserByEmailService,
   ) {}
 
-  public async execute(createUserDto: CreateUserDto): Promise<UserEntity> {
+  public async create(createUserDto: CreateUserDto): Promise<UserEntity> {
     await this.loadUserByEmailService.loadByEmail(createUserDto.email);
 
     const data = {

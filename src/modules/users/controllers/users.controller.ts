@@ -53,6 +53,10 @@ export class UsersController {
     description: 'Load user by id.',
   })
   @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'User unauthorized.',
+  })
+  @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: 'User not found.',
   })
@@ -63,10 +67,16 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Load all users.',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'User unauthorized.',
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,

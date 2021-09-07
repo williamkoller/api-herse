@@ -10,12 +10,12 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
-import { UserInputDto } from '../dtos/user-input/user-input.dto';
-import { UserOutputDto } from '../dtos/user-output/user-output.dto';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import { AuthService } from '../services/auth.service';
+import { UserInputDto } from '@/modules/auth/dtos/user-input/user-input.dto';
+import { UserOutputDto } from '@/modules/auth/dtos/user-output/user-output.dto';
+import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard';
+import { AuthService } from '@/modules/auth/services/auth.service';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -47,6 +47,7 @@ export class AuthController {
   @Get('me')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Logging user',

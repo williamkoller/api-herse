@@ -1,3 +1,3 @@
 export default {
-  environment: '.env',
+  environment: __dirname + '.env',
 };

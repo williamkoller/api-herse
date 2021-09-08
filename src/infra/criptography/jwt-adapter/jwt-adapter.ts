@@ -16,19 +16,20 @@ type JwtPayloadType = {
 
 @Injectable()
 export class JwtAdapter implements Encrypter, Decrypter {
+  constructor(private readonly jwtService: JwtService) {}
   public async encrypt(user: UserEntity): Promise<string> {
-    const jwtService = new JwtService({ secret: process.env.JWT_SECRET });
     const JwtPayloadType: JwtPayloadType = {
       id: user.id,
       name: user.name,
       surname: user.surname,
       email: user.email,
     };
-    return jwtService.signAsync(JwtPayloadType);
+    return this.jwtService.signAsync(JwtPayloadType);
   }
 
   public async decrypt(token: string): Promise<VerifyTokenType> {
-    const jwtService = new JwtService({ secret: process.env.JWT_SECRET });
-    return jwtService.verifyAsync(token);
+    return this.jwtService.verifyAsync(token, {
+      secret: process.env.JWT_SECRET,
+    });
   }
 }

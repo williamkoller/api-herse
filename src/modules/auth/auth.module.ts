@@ -22,18 +22,18 @@ import { RolesRepository } from '@/modules/roles/repositories/roles.repository';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        defaultStrategy: configService.get('DEFAULT_STRATEGY'),
-        property: configService.get('PROPERTY_USERS'),
-        session: configService.get('SESSION'),
+        defaultStrategy: configService.get<string>('defaultStrategy'),
+        property: configService.get<string>('property'),
+        session: configService.get<string>('session'),
       }),
     }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('JWT_SECRET'),
+        secret: configService.get('secret'),
         signOptions: {
-          expiresIn: configService.get('JWT_EXPIRES_IN'),
+          expiresIn: configService.get('expiresIn'),
         },
       }),
     }),
@@ -48,6 +48,5 @@ import { RolesRepository } from '@/modules/roles/repositories/roles.repository';
     LoadUserByIdService,
   ],
   controllers: [AuthController],
-  exports: [JwtStrategy],
 })
 export class AuthModule {}

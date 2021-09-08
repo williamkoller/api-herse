@@ -2,6 +2,7 @@ import {
   AddRoleRepository,
   FindRoleAndCountRepository,
   FindRoleByNameRepository,
+  FindUserByRoleRepository,
 } from '@/data/protocols/role';
 import { RoleEntity } from '@/infra/db/entities/role-entity/role.entity';
 import { EntityRepository, Repository } from 'typeorm';
@@ -13,7 +14,8 @@ export class RolesRepository
   implements
     AddRoleRepository,
     FindRoleAndCountRepository,
-    FindRoleByNameRepository
+    FindRoleByNameRepository,
+    FindUserByRoleRepository
 {
   public async add(addRoleDto: AddRoleDto): Promise<RoleEntity> {
     const newRole = this.create(addRoleDto);
@@ -31,5 +33,14 @@ export class RolesRepository
     limit: number,
   ): Promise<[RoleEntity[], number]> {
     return await this.findAndCount({ skip: offset, take: limit });
+  }
+
+  public async findUserByRole(userId: number): Promise<string[]> {
+    const { permissions: permissionsByUser } = await this.findOne({
+      where: {
+        userId,
+      },
+    });
+    return permissionsByUser;
   }
 }

@@ -18,6 +18,9 @@ import { ValidationParamsPipe } from '@/common/pipes/validation-params.pipe';
 import { UserOutputType } from '@/modules/users/types/user-output.type';
 import { LoadAllUsersService } from '@/modules/users/services/load-all-users/load-all-users.service';
 import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard';
+import { PermissionsGuard } from '@/modules/auth/guards/permissions.guard';
+import { Permissions } from '@/modules/users/decorators/permissions.decorator';
+import { UserPermissions } from '@/modules/users/enum/user-permissions.enum';
 
 @ApiTags('users')
 @Controller('users')
@@ -45,7 +48,8 @@ export class UsersController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions(UserPermissions.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
   @ApiResponse({

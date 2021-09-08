@@ -11,10 +11,12 @@ import { LoadAllUsersService } from '@/modules/users/services/load-all-users/loa
 import { JwtAdapter } from '@/infra/criptography/jwt-adapter/jwt-adapter';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { LoadUserByRoleService } from '@/modules/roles/services/load-user-by-role/load-user-by-role.service';
+import { RolesRepository } from '@/modules/roles/repositories/roles.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity, UsersRepository]),
+    TypeOrmModule.forFeature([UserEntity, UsersRepository, RolesRepository]),
     PassportModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -32,6 +34,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     LoadUserByEmailService,
     LoadUserByIdService,
     LoadAllUsersService,
+    LoadUserByRoleService,
   ],
   controllers: [UsersController],
 })

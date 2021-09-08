@@ -1,6 +1,7 @@
 import { LoadUserProfileService } from '@/modules/users/services/load-user-profile/load-user-profile.service';
 import { UserOutputType } from '@/modules/users/types/user-output.type';
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -16,6 +17,9 @@ import { UserInputDto } from '@/modules/auth/dtos/user-input/user-input.dto';
 import { UserOutputDto } from '@/modules/auth/dtos/user-output/user-output.dto';
 import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard';
 import { AuthService } from '@/modules/auth/services/auth.service';
+import { PermissionsGuard } from '../guards/permissions.guard';
+import { Permissions } from '@/modules/users/decorators/permissions.decorator';
+import { UserPermissions } from '@/modules/users/enum/user-permissions.enum';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -45,7 +49,8 @@ export class AuthController {
   }
 
   @Get('me')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions(UserPermissions.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
   @ApiResponse({
@@ -61,6 +66,10 @@ export class AuthController {
     description: 'User not found.',
   })
   public async me(@Req() req: Request): Promise<UserOutputType> {
-    return await this.loadUserProfileService.loadUserProfile(req.user.id);
+    try {
+      return await this.loadUserProfileService.loadUserProfile(req.user.id);
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
   }
 }

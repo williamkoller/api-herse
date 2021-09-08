@@ -11,10 +11,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from '@/modules/auth/strategies/jwt.strategy';
 import { AuthController } from '@/modules/auth/controllers/auth.controller';
 import { LoadUserProfileService } from '@/modules/users/services/load-user-profile/load-user-profile.service';
+import { LoadUserByRoleService } from '@/modules/roles/services/load-user-by-role/load-user-by-role.service';
+import { LoadUserByIdService } from '@/modules/users/services/load-user-by-id/load-user-by-id.service';
+import { RolesRepository } from '@/modules/roles/repositories/roles.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity, UsersRepository]),
+    TypeOrmModule.forFeature([UserEntity, UsersRepository, RolesRepository]),
     PassportModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -41,6 +44,8 @@ import { LoadUserProfileService } from '@/modules/users/services/load-user-profi
     JwtAdapter,
     JwtStrategy,
     LoadUserProfileService,
+    LoadUserByRoleService,
+    LoadUserByIdService,
   ],
   controllers: [AuthController],
   exports: [JwtStrategy],

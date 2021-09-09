@@ -1,5 +1,5 @@
 import { ValidateUserRepository } from '@/data/protocols/auth/validate-user.repository';
-import { BcryptAdapter } from '@/infra/criptography/bcript-adapter/bcrypt-adapter';
+import { BcryptAdapter } from '@/infra/criptography/bcrypt-adapter/bcrypt-adapter';
 import { JwtAdapter } from '@/infra/criptography/jwt-adapter/jwt-adapter';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserInputDto } from '@/modules/auth/dtos/user-input/user-input.dto';

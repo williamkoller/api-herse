@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from '@/modules/auth/services/auth.service';
-import { BcryptAdapter } from '@/infra/criptography/bcript-adapter/bcrypt-adapter';
+import { BcryptAdapter } from '@/infra/criptography/bcrypt-adapter/bcrypt-adapter';
 import { JwtAdapter } from '@/infra/criptography/jwt-adapter/jwt-adapter';
 import { JwtModule } from '@nestjs/jwt';
 import { UsersRepository } from '@/modules/users/repositories/users.repository';

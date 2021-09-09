@@ -1,4 +1,4 @@
-import { BcryptAdapter } from '@/infra/criptography/bcript-adapter/bcrypt-adapter';
+import { BcryptAdapter } from '@/infra/criptography/bcrypt-adapter/bcrypt-adapter';
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from '@/modules/users/repositories/users.repository';
 import { CreateUserDto } from '@/modules/users/dtos/create-user/create-user.dto';

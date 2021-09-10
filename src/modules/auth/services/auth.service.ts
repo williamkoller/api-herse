@@ -22,7 +22,7 @@ export class AuthService implements ValidateUserRepository {
     const user = await this.userRepo.loadByEmail(email);
 
     if (!user) {
-      throw new UnauthorizedException('Unauthorized user.');
+      throw new UnauthorizedException();
     }
 
     const isValid = await this.bcryptAdapter.compare(password, user.password);
@@ -33,24 +33,12 @@ export class AuthService implements ValidateUserRepository {
 
     const token = await this.jwtAdapter.encrypt(user);
 
-    const verifyToken = await this.jwtAdapter.decrypt(token);
-
     await this.lastTimeLogged(user.id);
-
-    this.verifyIfUserHasToken(user.id, verifyToken.id);
 
     return {
       user: userTransformer(user),
       token,
     };
-  }
-
-  private verifyIfUserHasToken(userId: number, userTokenId: number): void {
-    const userHasToken = () => userId !== userTokenId;
-
-    if (userHasToken()) {
-      throw new UnauthorizedException('Invalid token.');
-    }
   }
 
   private async lastTimeLogged(userId: number): Promise<void> {

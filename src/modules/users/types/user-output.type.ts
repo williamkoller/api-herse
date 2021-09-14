@@ -1,4 +1,4 @@
-import { RoleEntity } from '@/infra/db/entities/role-entity/role.entity';
+import { RoleOutputType } from '@/modules/roles/types/role.output.type';
 
 export type UserOutputType = {
   id: number;
@@ -6,7 +6,7 @@ export type UserOutputType = {
   surname: string;
   email: string;
   lastLogged: string;
-  roles: RoleEntity[];
-  createdAt: Date;
-  updatedAt: Date;
+  roles: RoleOutputType[];
+  createdAt: Date | string;
+  updatedAt: Date | string;
 };

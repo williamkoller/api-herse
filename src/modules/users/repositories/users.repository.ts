@@ -28,7 +28,9 @@ export class UsersRepository
   }
 
   public async loadByEmail(email: string): Promise<UserEntity> {
-    return await this.findOne({ where: { email } });
+    return await this.createQueryBuilder('users')
+      .where('users.email = (:email)', { email })
+      .getOne();
   }
 
   public async loadById(id: number): Promise<UserEntity> {
@@ -52,5 +54,12 @@ export class UsersRepository
   ): Promise<UserEntity> {
     const updateUser = this.merge(user, { ...updateUserDto });
     return await this.save(updateUser);
+  }
+
+  public async findUserAndCount(
+    offset: number,
+    limit: number,
+  ): Promise<[UserEntity[], number]> {
+    return await this.findAndCount({ skip: offset, take: limit });
   }
 }

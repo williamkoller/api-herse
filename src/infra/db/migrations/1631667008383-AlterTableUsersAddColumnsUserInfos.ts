@@ -5,9 +5,9 @@ export class AlterTableUsersAddColumnsUserInfos1631667008383
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "users"
-        ADD COLUMN "cpf" character varying(11),
-        ADD COLUMN "cnh" character varying(11),
-        ADD COLUMN "rg" character varying(8);`);
+        ADD COLUMN "cpf" character varying,
+        ADD COLUMN "cnh" character varying,
+        ADD COLUMN "rg" character varying;`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

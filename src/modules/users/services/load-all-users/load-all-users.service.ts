@@ -24,7 +24,7 @@ export class LoadAllUsersService {
 
     const offset = this.calculateOffsetService.calculateOffset(page, limit);
 
-    const [users, totalCount] = await this.usersRepo.findUserAndCount(
+    const [users, totalCount] = await this.usersRepo.loadAndCount(
       offset,
       limit,
     );

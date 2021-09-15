@@ -8,6 +8,7 @@ import {
   LoadAllUsersRepository,
   LastTimeLoggedRepository,
   UpdateUserRepository,
+  LoadUserAndCountRepository,
 } from '@/data/protocols/user';
 import { UpddateUserDto } from '@/modules/users/dtos/update-user/update-user.dto';
 
@@ -20,7 +21,8 @@ export class UsersRepository
     LoadUserByIdRepository,
     LoadAllUsersRepository,
     LastTimeLoggedRepository,
-    UpdateUserRepository
+    UpdateUserRepository,
+    LoadUserAndCountRepository
 {
   public async add(createUserDto: CreateUserDto): Promise<UserEntity> {
     const newUser = this.create(createUserDto);
@@ -56,7 +58,7 @@ export class UsersRepository
     return await this.save(updateUser);
   }
 
-  public async findUserAndCount(
+  public async loadAndCount(
     offset: number,
     limit: number,
   ): Promise<[UserEntity[], number]> {

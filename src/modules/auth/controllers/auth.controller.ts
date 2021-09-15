@@ -1,5 +1,5 @@
 import { LoadUserProfileService } from '@/modules/users/services/load-user-profile/load-user-profile.service';
-import { UserOutputType } from '@/modules/users/types/user-output.type';
+import { UserOutput } from '@/modules/users/interfaces/user-output.interface';
 import {
   BadRequestException,
   Body,
@@ -14,7 +14,7 @@ import {
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { UserInputDto } from '@/modules/auth/dtos/user-input/user-input.dto';
-import { UserOutputDto } from '@/modules/auth/dtos/user-output/user-output.dto';
+import { TokenOutputDto } from '@/modules/auth/dtos/token-output/token-output.dto';
 import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard';
 import { AuthService } from '@/modules/auth/services/auth.service';
 import { PermissionsGuard } from '../guards/permissions.guard';
@@ -41,11 +41,16 @@ export class AuthController {
   })
   public async login(
     @Body() userInputDto: UserInputDto,
-  ): Promise<UserOutputDto> {
-    return await this.authService.validateUser({
-      email: userInputDto.email,
-      password: userInputDto.password,
-    });
+  ): Promise<TokenOutputDto> {
+    try {
+      return await this.authService.validateUser({
+        email: userInputDto.email,
+        password: userInputDto.password,
+      });
+    } catch (e) {
+      console.log(e);
+      throw new BadRequestException(e.message);
+    }
   }
 
   @Get('me')
@@ -65,7 +70,7 @@ export class AuthController {
     status: HttpStatus.NOT_FOUND,
     description: 'User not found.',
   })
-  public async me(@Req() req: Request): Promise<UserOutputType> {
+  public async me(@Req() req: Request): Promise<UserOutput> {
     try {
       return await this.loadUserProfileService.loadUserProfile(req.user.id);
     } catch (e) {

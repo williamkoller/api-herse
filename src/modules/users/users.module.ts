@@ -14,6 +14,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoadUserByRoleService } from '@/modules/roles/services/load-user-by-role/load-user-by-role.service';
 import { RolesRepository } from '@/modules/roles/repositories/roles.repository';
 import { JwtModule } from '@nestjs/jwt';
+import { LoadUserEmailAlreadyExistsService } from '@/modules/users/services/load-user-by-email-already-exists/load-user-email-already-exists.service';
+import { BuildPaginationObjectService } from '@/shared/pagination/services/build-pagination-object/build-pagination-object.service';
+import { CalculateOffsetService } from '@/shared/pagination/services/calculate-offset/calculate-offset.service';
+import { LoadAllRolesService } from '../roles/services/load-all-roles/load-all-roles.service';
 
 @Module({
   imports: [
@@ -43,9 +47,13 @@ import { JwtModule } from '@nestjs/jwt';
     CreateUserService,
     JwtAdapter,
     LoadUserByEmailService,
+    LoadUserEmailAlreadyExistsService,
     LoadUserByIdService,
     LoadAllUsersService,
     LoadUserByRoleService,
+    BuildPaginationObjectService,
+    CalculateOffsetService,
+    LoadAllRolesService,
   ],
   controllers: [UsersController],
 })

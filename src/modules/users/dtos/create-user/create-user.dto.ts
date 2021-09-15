@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Length,
+  MinLength,
+} from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty()
@@ -25,4 +32,22 @@ export class CreateUserDto {
     message: 'Password with minimum of eight characters.',
   })
   password: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  @Length(11, 11, { each: true, message: 'CPF must be eleven characters' })
+  cpf: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  @Length(11, 11, { each: true, message: 'CNH must be eleven characters' })
+  cnh: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  @Length(8, 8, { each: true, message: 'RG must be eight characters' })
+  rg: string;
 }

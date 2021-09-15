@@ -6,6 +6,9 @@ export type UserOutputType = {
   surname: string;
   email: string;
   lastLogged: string;
+  cpf: string;
+  cnh: string;
+  rg: string;
   roles: RoleOutputType[];
   createdAt: Date | string;
   updatedAt: Date | string;

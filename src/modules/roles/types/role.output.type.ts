@@ -1,5 +1,6 @@
 export type RoleOutputType = {
   id: number;
+  userId: number;
   name: string;
   description: string;
   permissions: string[];

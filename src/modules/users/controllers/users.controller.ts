@@ -1,4 +1,3 @@
-import { UserEntity } from '@/infra/db/entities/user-entity/user-entity';
 import {
   Body,
   Controller,
@@ -7,7 +6,9 @@ import {
   HttpStatus,
   Param,
   Post,
+  Query,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '@/modules/users/dtos/create-user/create-user.dto';
@@ -15,12 +16,17 @@ import { CreateUserService } from '@/modules/users/services/create-user/create-u
 import { UserIdInputDto } from '@/modules/users/dtos/user-id-input/user-id-input.dto';
 import { LoadUserByIdService } from '@/modules/users/services/load-user-by-id/load-user-by-id.service';
 import { ValidationParamsPipe } from '@/common/pipes/validation-params.pipe';
-import { UserOutputType } from '@/modules/users/types/user-output.type';
+import {
+  UserOutput,
+  UserParamsOutput,
+} from '@/modules/users/interfaces/user-output.interface';
 import { LoadAllUsersService } from '@/modules/users/services/load-all-users/load-all-users.service';
 import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '@/modules/auth/guards/permissions.guard';
 import { Permissions } from '@/modules/users/decorators/permissions.decorator';
 import { UserPermissions } from '@/modules/users/enum/user-permissions.enum';
+import { FilterUserDto } from '@/modules/users/dtos/filter-user/filter-user.dto';
+import { ResultWithPagination } from '@/shared/pagination/interfaces/result-with-pagination/result-with-pagination.interface';
 
 @ApiTags('users')
 @Controller('users')
@@ -43,7 +49,7 @@ export class UsersController {
   })
   public async create(
     @Body() createUserDto: CreateUserDto,
-  ): Promise<UserEntity> {
+  ): Promise<UserParamsOutput> {
     return await this.createUserService.create(createUserDto);
   }
 
@@ -66,7 +72,7 @@ export class UsersController {
   })
   public async loadById(
     @Param(ValidationParamsPipe) userIdInputDto: UserIdInputDto,
-  ): Promise<UserOutputType> {
+  ): Promise<UserOutput> {
     return await this.loadUserByIdService.loadById(userIdInputDto.id);
   }
 
@@ -87,7 +93,9 @@ export class UsersController {
     status: HttpStatus.NOT_FOUND,
     description: 'No record found.',
   })
-  public async loadAll(): Promise<UserOutputType[]> {
-    return await this.loadAllUsersService.loadAll();
+  public async loadAll(
+    @Query(ValidationPipe) filterUserDto: FilterUserDto,
+  ): Promise<ResultWithPagination<UserOutput[]>> {
+    return await this.loadAllUsersService.findAll(filterUserDto);
   }
 }

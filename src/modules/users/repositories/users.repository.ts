@@ -7,7 +7,9 @@ import {
   LoadUserByIdRepository,
   LoadAllUsersRepository,
   LastTimeLoggedRepository,
+  UpdateUserRepository,
 } from '@/data/protocols/user';
+import { UpddateUserDto } from '@/modules/users/dtos/update-user/update-user.dto';
 
 @EntityRepository(UserEntity)
 export class UsersRepository
@@ -17,7 +19,8 @@ export class UsersRepository
     LoadUserByEmailRepository,
     LoadUserByIdRepository,
     LoadAllUsersRepository,
-    LastTimeLoggedRepository
+    LastTimeLoggedRepository,
+    UpdateUserRepository
 {
   public async add(createUserDto: CreateUserDto): Promise<UserEntity> {
     const newUser = this.create(createUserDto);
@@ -25,7 +28,9 @@ export class UsersRepository
   }
 
   public async loadByEmail(email: string): Promise<UserEntity> {
-    return await this.findOne({ where: { email } });
+    return await this.createQueryBuilder('users')
+      .where('users.email = (:email)', { email })
+      .getOne();
   }
 
   public async loadById(id: number): Promise<UserEntity> {
@@ -41,5 +46,20 @@ export class UsersRepository
       userId,
       lastLogged,
     ]);
+  }
+
+  public async updateUser(
+    user: UserEntity,
+    updateUserDto: UpddateUserDto,
+  ): Promise<UserEntity> {
+    const updateUser = this.merge(user, { ...updateUserDto });
+    return await this.save(updateUser);
+  }
+
+  public async findUserAndCount(
+    offset: number,
+    limit: number,
+  ): Promise<[UserEntity[], number]> {
+    return await this.findAndCount({ skip: offset, take: limit });
   }
 }

@@ -19,6 +19,15 @@ export class UserEntity extends BaseEntity {
   @Column({ type: 'timestamp', nullable: true })
   lastLogged?: Date;
 
+  @Column({ type: 'varchar', nullable: true })
+  cpf: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  cnh: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  rg: string;
+
   @OneToMany(() => RoleEntity, (role) => role.user, { eager: true })
   @JoinTable()
   roles: RoleEntity[];

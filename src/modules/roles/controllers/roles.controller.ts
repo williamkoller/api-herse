@@ -15,8 +15,9 @@ import { FilterRoleDto } from '@/modules/roles/dtos/filter-role/filter-role.dto'
 import { LoadAllRolesService } from '@/modules/roles/services/load-all-roles/load-all-roles.service';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard';
-import { AddRoleDto } from '../dtos/add-role/add-role.dto';
-import { AddRoleService } from '../services/add-role/add-role.service';
+import { AddRoleDto } from '@/modules/roles/dtos/add-role/add-role.dto';
+import { AddRoleService } from '@/modules/roles/services/add-role/add-role.service';
+import { RoleOutputType } from '@/modules/roles/types/role.output.type';
 
 @ApiTags('roles')
 @Controller('roles')
@@ -64,7 +65,7 @@ export class RolesController {
   })
   public async loadAll(
     @Query(ValidationPipe) filterRoleDto: FilterRoleDto,
-  ): Promise<ResultWithPagination<RoleEntity[]>> {
+  ): Promise<ResultWithPagination<RoleOutputType[]>> {
     return await this.loadAllRolesService.findAll(filterRoleDto);
   }
 }

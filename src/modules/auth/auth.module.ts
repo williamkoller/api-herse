@@ -14,6 +14,7 @@ import { LoadUserProfileService } from '@/modules/users/services/load-user-profi
 import { LoadUserByRoleService } from '@/modules/roles/services/load-user-by-role/load-user-by-role.service';
 import { LoadUserByIdService } from '@/modules/users/services/load-user-by-id/load-user-by-id.service';
 import { RolesRepository } from '@/modules/roles/repositories/roles.repository';
+import { LoadUserByEmailService } from '@/modules/users/services/load-user-by-email/load-user-by-email.service';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { RolesRepository } from '@/modules/roles/repositories/roles.repository';
     LoadUserProfileService,
     LoadUserByRoleService,
     LoadUserByIdService,
+    LoadUserByEmailService,
   ],
   controllers: [AuthController],
 })

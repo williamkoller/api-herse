@@ -7,7 +7,9 @@ import {
   LoadUserByIdRepository,
   LoadAllUsersRepository,
   LastTimeLoggedRepository,
+  UpdateUserRepository,
 } from '@/data/protocols/user';
+import { UpddateUserDto } from '@/modules/users/dtos/update-user/update-user.dto';
 
 @EntityRepository(UserEntity)
 export class UsersRepository
@@ -17,7 +19,8 @@ export class UsersRepository
     LoadUserByEmailRepository,
     LoadUserByIdRepository,
     LoadAllUsersRepository,
-    LastTimeLoggedRepository
+    LastTimeLoggedRepository,
+    UpdateUserRepository
 {
   public async add(createUserDto: CreateUserDto): Promise<UserEntity> {
     const newUser = this.create(createUserDto);
@@ -41,5 +44,13 @@ export class UsersRepository
       userId,
       lastLogged,
     ]);
+  }
+
+  public async updateUser(
+    user: UserEntity,
+    updateUserDto: UpddateUserDto,
+  ): Promise<UserEntity> {
+    const updateUser = this.merge(user, { ...updateUserDto });
+    return await this.save(updateUser);
   }
 }

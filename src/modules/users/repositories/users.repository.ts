@@ -9,8 +9,10 @@ import {
   LastTimeLoggedRepository,
   UpdateUserRepository,
   LoadUserAndCountRepository,
+  LoadUserByCpfRepository,
 } from '@/data/protocols/user';
-import { UpddateUserDto } from '@/modules/users/dtos/update-user/update-user.dto';
+import { UpdateUserDto } from '@/modules/users/dtos/update-user/update-user.dto';
+import { validateCpf } from '@/utils/validator/validate-cpf/validate-cpf';
 
 @EntityRepository(UserEntity)
 export class UsersRepository
@@ -22,7 +24,8 @@ export class UsersRepository
     LoadAllUsersRepository,
     LastTimeLoggedRepository,
     UpdateUserRepository,
-    LoadUserAndCountRepository
+    LoadUserAndCountRepository,
+    LoadUserByCpfRepository
 {
   public async add(createUserDto: CreateUserDto): Promise<UserEntity> {
     const newUser = this.create(createUserDto);
@@ -52,7 +55,7 @@ export class UsersRepository
 
   public async updateUser(
     user: UserEntity,
-    updateUserDto: UpddateUserDto,
+    updateUserDto: UpdateUserDto,
   ): Promise<UserEntity> {
     const updateUser = this.merge(user, { ...updateUserDto });
     return await this.save(updateUser);
@@ -63,5 +66,9 @@ export class UsersRepository
     limit: number,
   ): Promise<[UserEntity[], number]> {
     return await this.findAndCount({ skip: offset, take: limit });
+  }
+
+  public async loadUserByCpf(cpf: string): Promise<UserEntity> {
+    return await this.findOne({ where: { cpf: validateCpf(cpf) } });
   }
 }

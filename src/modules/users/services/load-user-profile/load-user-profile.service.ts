@@ -5,10 +5,10 @@ import { UserOutput } from '@/modules/users/interfaces/user-output.interface';
 
 @Injectable()
 export class LoadUserProfileService {
-  constructor(private readonly userRepo: UsersRepository) {}
+  constructor(private readonly usersRepo: UsersRepository) {}
 
   public async loadUserProfile(id: number): Promise<UserOutput> {
-    const userExists = await this.userRepo.loadById(id);
+    const userExists = await this.usersRepo.loadById(id);
 
     if (!userExists) {
       throw new NotFoundException('User not found.');

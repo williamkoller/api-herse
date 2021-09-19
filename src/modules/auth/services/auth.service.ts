@@ -13,7 +13,7 @@ export class AuthService implements ValidateUserRepository {
     private readonly bcryptAdapter: BcryptAdapter,
     private readonly jwtAdapter: JwtAdapter,
     private readonly loadUserByEmailService: LoadUserByEmailService,
-    private readonly userRepo: UsersRepository,
+    private readonly usersRepo: UsersRepository,
   ) {}
 
   public async validateUser({
@@ -38,6 +38,6 @@ export class AuthService implements ValidateUserRepository {
   }
 
   private async lastTimeLogged(userId: number): Promise<void> {
-    await this.userRepo.lastTimeLogged(userId, new Date());
+    await this.usersRepo.lastTimeLogged(userId, new Date());
   }
 }

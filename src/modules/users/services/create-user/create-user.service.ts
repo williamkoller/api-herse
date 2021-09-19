@@ -1,5 +1,5 @@
 import { BcryptAdapter } from '@/infra/criptography/bcrypt-adapter/bcrypt-adapter';
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { UsersRepository } from '@/modules/users/repositories/users.repository';
 import { CreateUserDto } from '@/modules/users/dtos/create-user/create-user.dto';
 import { validateCpf } from '@/utils/validator/validate-cpf/validate-cpf';
@@ -10,7 +10,7 @@ import { UserParamsOutput } from '@/modules/users/interfaces/user-output.interfa
 @Injectable()
 export class CreateUserService {
   constructor(
-    private readonly userRepo: UsersRepository,
+    private readonly usersRepo: UsersRepository,
     private readonly bcryptAdapter: BcryptAdapter,
     private readonly loadUserEmailAlreadyExistsService: LoadUserEmailAlreadyExistsService,
   ) {}
@@ -20,13 +20,19 @@ export class CreateUserService {
       createUserDto.email,
     );
 
+    const cpfExists = await this.usersRepo.loadUserByCpf(createUserDto.cpf);
+
+    if (cpfExists) {
+      throw new ConflictException('CPF is already in use.');
+    }
+
     const data = {
       ...createUserDto,
       password: await this.bcryptAdapter.hash(createUserDto.password),
       cpf: validateCpf(createUserDto.cpf),
     };
 
-    const userCreateddd = await this.userRepo.add(data);
+    const userCreateddd = await this.usersRepo.add(data);
 
     return createUserTransformer(userCreateddd);
   }

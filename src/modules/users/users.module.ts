@@ -17,7 +17,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { LoadUserEmailAlreadyExistsService } from '@/modules/users/services/load-user-by-email-already-exists/load-user-email-already-exists.service';
 import { BuildPaginationObjectService } from '@/shared/pagination/services/build-pagination-object/build-pagination-object.service';
 import { CalculateOffsetService } from '@/shared/pagination/services/calculate-offset/calculate-offset.service';
-import { LoadAllRolesService } from '../roles/services/load-all-roles/load-all-roles.service';
+import { LoadAllRolesService } from '@/modules/roles/services/load-all-roles/load-all-roles.service';
+import { LoadUserByCpfService } from '@/modules/users/services/load-user-by-cpf/load-user-by-cpf.service';
+import { UpdateUserService } from './services/update-user/update-user.service';
 
 @Module({
   imports: [
@@ -54,6 +56,8 @@ import { LoadAllRolesService } from '../roles/services/load-all-roles/load-all-r
     BuildPaginationObjectService,
     CalculateOffsetService,
     LoadAllRolesService,
+    LoadUserByCpfService,
+    UpdateUserService,
   ],
   controllers: [UsersController],
 })

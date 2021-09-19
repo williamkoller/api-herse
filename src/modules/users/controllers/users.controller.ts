@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -6,6 +7,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
   ValidationPipe,
@@ -27,6 +29,11 @@ import { Permissions } from '@/modules/users/decorators/permissions.decorator';
 import { UserPermissions } from '@/modules/users/enum/user-permissions.enum';
 import { FilterUserDto } from '@/modules/users/dtos/filter-user/filter-user.dto';
 import { ResultWithPagination } from '@/shared/pagination/interfaces/result-with-pagination/result-with-pagination.interface';
+import { UserEntity } from '@/infra/db/entities/user-entity/user-entity';
+import { LoadUserByCpfService } from '../services/load-user-by-cpf/load-user-by-cpf.service';
+import { UserCpfInputDto } from '../dtos/user-cpf-input/user-cpf-input.dto';
+import { UpdateUserService } from '../services/update-user/update-user.service';
+import { UpdateUserDto } from '../dtos/update-user/update-user.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -35,6 +42,8 @@ export class UsersController {
     private readonly createUserService: CreateUserService,
     private readonly loadUserByIdService: LoadUserByIdService,
     private readonly loadAllUsersService: LoadAllUsersService,
+    private readonly loadUserByCpfService: LoadUserByCpfService,
+    private readonly updateUserService: UpdateUserService,
   ) {}
 
   @Post()
@@ -72,7 +81,7 @@ export class UsersController {
   })
   public async loadById(
     @Param(ValidationParamsPipe) userIdInputDto: UserIdInputDto,
-  ): Promise<UserOutput> {
+  ): Promise<UserEntity> {
     return await this.loadUserByIdService.loadById(userIdInputDto.id);
   }
 
@@ -97,5 +106,59 @@ export class UsersController {
     @Query(ValidationPipe) filterUserDto: FilterUserDto,
   ): Promise<ResultWithPagination<UserOutput[]>> {
     return await this.loadAllUsersService.findAll(filterUserDto);
+  }
+
+  @Get('load-user-by-cpf/:cpf')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions(UserPermissions.ADMIN)
+  @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Load user by CPF.',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'User unauthorized.',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'User not found.',
+  })
+  public async loadUserByCpf(
+    @Param(ValidationParamsPipe) userCpfInputDto: UserCpfInputDto,
+  ): Promise<UserEntity> {
+    return await this.loadUserByCpfService.loadUserByCpf(userCpfInputDto.cpf);
+  }
+
+  @Put('update-cpf-by-user/:id')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions(UserPermissions.ADMIN)
+  @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Load user by CPF.',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'User unauthorized.',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'User not found.',
+  })
+  public async updateCpfByUser(
+    @Param(ValidationParamsPipe) userIdInputDto: UserIdInputDto,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<UserEntity> {
+    try {
+      return await this.updateUserService.updateCpfByUser(
+        userIdInputDto.id,
+        updateUserDto,
+      );
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
   }
 }

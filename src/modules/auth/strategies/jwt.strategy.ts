@@ -10,7 +10,7 @@ type PayloadType = {
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly userRepo: UsersRepository) {
+  constructor(private readonly usersRepo: UsersRepository) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -18,7 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
   public async validate(payloadType: PayloadType): Promise<UserEntity> {
-    const user = await this.userRepo.loadById(payloadType.id);
+    const user = await this.usersRepo.loadById(payloadType.id);
     if (!user) {
       throw new UnauthorizedException();
     }

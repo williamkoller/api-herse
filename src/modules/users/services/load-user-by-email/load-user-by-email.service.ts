@@ -4,10 +4,10 @@ import { UserEntity } from '@/infra/db/entities/user-entity/user-entity';
 
 @Injectable()
 export class LoadUserByEmailService {
-  constructor(private readonly userRepo: UsersRepository) {}
+  constructor(private readonly usersRepo: UsersRepository) {}
 
   public async loadByEmail(email: string): Promise<UserEntity> {
-    const user = await this.userRepo.loadByEmail(email);
+    const user = await this.usersRepo.loadByEmail(email);
 
     if (!user) {
       throw new NotFoundException('User not found.');
